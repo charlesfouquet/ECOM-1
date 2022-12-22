@@ -1,0 +1,78 @@
+img#hero {
+    width: 100%;
+}
+
+#heroText {
+    font-size: 2rem;
+    text-shadow: 2px 2px 2px rgb(61, 61, 61);
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.red {
+    color: red;
+}
+
+#products {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px 25px;
+    width: 60%;
+    margin: auto;
+    margin-top: 25px;
+    text-align: center;
+}
+
+.card img {
+    margin-top: 10px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.card:hover {
+    background-color: peachpuff;
+}
+
+.price {
+    background-color: rgb(255, 247, 237);
+    width: 50%;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-radius: 10px;
+}
+
+.cart img {
+    width: 100%;
+}
+
+#totalPriceLeft {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-right: 40px;
+}
+
+.productInCart {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.productInCart button {
+    font-size: 0.8rem;
+    margin-left: auto;
+    margin-right: 0;
+    height: fit-content;
+    width: fit-content;
+}
+
+.productInCart .qty {
+    width: 100px;
+}
