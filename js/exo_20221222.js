@@ -71,11 +71,14 @@ $.ajax({
 
                 var qtyFields = $(".qty");
                 qtyFields.each(function(){
-                    $(this).keyup(function(){
-                        updateCartTotal();
-                    })
+                    // $(this).keyup(function(){
+                    //     updateCartTotal();
+                    // })
                     $(this).change(function(){
                         updateCartTotal();
+                        if (($(".cart div").html().match("Votre panier est tristement vide en ce moment") != null) || (cartTotal == 0)) {
+                            intoCart = 0;
+                        }
                     })
                 });
 
@@ -85,7 +88,7 @@ $.ajax({
                         var toDelete = $(this).attr('id').replace("deleteButton-", "productID-");
                         $("#"+toDelete).remove();
                         updateCartTotal();
-                        if ($(".cart div").html().match("Votre panier est tristement vide en ce moment") != null) {
+                        if (($(".cart div").html().match("Votre panier est tristement vide en ce moment") != null) || (cartTotal == 0)) {
                             intoCart = 0;
                         }
                     })
