@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.6.2.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script src="js/core.js"></script>
     <script src="js/exo_20221222.js" defer></script>
     <title>Exercice de Noël</title>
 </head>
@@ -48,8 +48,10 @@
         </div>
     </nav>
 
-    <img src="img/hero.png" alt="Fond d'écran de Noël" id="hero">
-    <div id="heroText"></div>
+    <div id="heroDiv">
+        <img src="img/hero.png" alt="Fond d'écran de Noël" id="hero">
+        <div id="heroText"></div>
+    </div>
 
     <div id="products"></div>
 
@@ -71,7 +73,72 @@
         </div>
         <div class="offcanvas-body">
             <div>Veuillez rentrer vos informations dans les champs de saisie ci-dessous :</div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="nom" placeholder="Dupont">
+                <label for="nom">Nom</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="prenom" placeholder="Michel">
+                <label for="prenom">Prénom</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="test@example.com">
+                <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="tel" class="form-control" id="phone" placeholder="0612345678">
+                <label for="phone">N° Tel</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="adresse" placeholder="1 rue de la Liberté">
+                <label for="adresse">Adresse</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="cp" placeholder="75012">
+                <label for="cp">Code Postal</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="ville" placeholder="Paris">
+                <label for="ville">Ville</label>
+            </div>
+            <button class="btn btn-primary confirmRegister" data-bs-toggle="modal" data-bs-target="#orderConfirmationPage" type="button">Enregistrer</button></div>
         </div>
     </div>
+
+    <div class="modal fade" id="orderConfirmationPage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Valider mes informations et mon panier</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h1>Vos informations</h1>
+                <div id="confOrdPagInfo">
+                    <div>Nom : <span id="confOrdPagNom"></span></div>
+                    <div>Prénom : <span id="confOrdPagPrenom"></span></div>
+                    <div>N° Tel : <span id="confOrdPagPhone"></span></div>
+                    <div>Email : <span id="confOrdPagEmail"></span></div>
+                    <div id="adresseSpan">Adresse :</div>
+                    <div id="adresseSpan"><span id="confOrdPagAdresse"></span>,</div>
+                    <div id="adresseSpan"><span id="confOrdPagCP"></span> <span id="confOrdPagVille"></span></div>
+                </div>
+                <h1>Votre panier</h1>
+                <div id="confOrdPagCart"></div>
+                <div class="card finalRecap">
+                    <div class="card-body">
+                        <div id="finalCart"></div>
+                        <div id="finalTotal">Total à payer : <span id="confOrdPagTotal"></span>€</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Finaliser la commande et payer</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 </html>

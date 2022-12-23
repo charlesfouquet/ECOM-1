@@ -1,3 +1,7 @@
+#heroDiv {
+    position: relative;
+}
+
 img#hero {
     width: 100%;
 }
@@ -49,10 +53,20 @@ img#hero {
     width: 100%;
 }
 
+#confirmHeader {
+    margin-top: 15px;
+}
+
 #totalPriceLeft {
     font-size: 1.5rem;
     font-weight: 600;
     margin-right: 40px;
+    line-height: 3rem;
+}
+
+.confirmOrder {
+    position: relative;
+    top: -5px;
 }
 
 .productInCart {
@@ -75,4 +89,38 @@ img#hero {
 
 .productInCart .qty {
     width: 100px;
+}
+
+#confOrdPagInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 20px;
+}
+
+#confOrdPagInfo span {
+    font-weight: 700;
+}
+
+#confOrdPagDetails {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#confOrdPagCart {
+    padding: 0 20px;
+}
+
+#adresseSpan {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.modal-dialog {
+    max-width: 600px !important;
+}
+
+.finalRecap {
+    border: 1px solid rgb(255, 194, 194);
+    background-color: rgb(255, 227, 227) !important;
+    color: rgb(100, 48, 48);
 }
