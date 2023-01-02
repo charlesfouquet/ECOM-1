@@ -124,3 +124,22 @@ img#hero {
     background-color: rgb(255, 227, 227) !important;
     color: rgb(100, 48, 48);
 }
+
+footer {
+    height: 100px;
+}
+
+.userHelp {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.error {
+    color: red;
+}
+
+.error::before {
+    font-family: "Font Awesome 6 free";
+    font-weight: 400;
+    content: "\f057  ";
+}

@@ -1,11 +1,10 @@
+// ============= TYPEWRITERJS =============
 var heroText = document.getElementById("heroText");
-
 var typewriter = new Typewriter(heroText, {
     loop: true,
     delay: 20,
     deleteSpeed: 20
   });
-
 typewriter.typeString("C'est <strong class=\"red\">NOEL</strong>, je peux maintenant m'amuser avec : <strong class=\"red\">HTML</strong>")
     .pauseFor(2000)
     .deleteChars(4)
@@ -22,6 +21,7 @@ typewriter.typeString("C'est <strong class=\"red\">NOEL</strong>, je peux mainte
     .pauseFor(2000)
     .start();
 
+// CONSTRUCTION PAGE DES ARTICLES, GESTION DU PANIER (AJOUT, MODIFICATION, SUPPRESSION)
 $.ajax({
     url:"ajax/produits.json",
     dataType:"json",
@@ -101,6 +101,7 @@ $.ajax({
     }
 });
 
+// ============= MISE A JOUR PANIER =============
 function updateCartTotal() {
     var cartTotal = 0;
     var intoCart = 0;
@@ -132,6 +133,7 @@ function updateCartTotal() {
     }
 }
 
+// RECUPERATION ET INJECTION DES INFORMATIONS NECESSAIRES SUR PAGE DE CONFIRMATION
 $(".confirmRegister").click(function(){
     $("#confOrdPagNom").text($("#nom").val());
     $("#confOrdPagPrenom").text($("#prenom").val());
@@ -141,9 +143,114 @@ $(".confirmRegister").click(function(){
     $("#confOrdPagCP").text($("#cp").val());
     $("#confOrdPagVille").text($("#ville").val());
     $("#confOrdPagCart").html("");
-    $(".productInCart").each(function(){
-        $("#confOrdPagCart").append("<div><strong>"+$(".productInCart .prodName").html()+"</strong></div><div id=\"confOrdPagDetails\"><div>Prix unitaire : <strong>"+$(".productInCart .unitPrice").html()+"</strong></div><div>Quantité : <strong>"+$(".productInCart .qty").val()+"</strong></div></div><hr>");
+    $(".productInCart").each(function(i){
+        $("#confOrdPagCart").append("<div><strong>"+$(".productInCart .prodName")[i].innerHTML+"</strong></div><div id=\"confOrdPagDetails\"><div>Prix unitaire : <strong>"+$(".productInCart .unitPrice")[i].innerHTML+"</strong></div><div>Quantité : <strong>"+$($(".productInCart .qty")[i]).val()+"</strong></div></div><hr>");
     })
-    
     $("#confOrdPagTotal").text($("#totalPrice").html());
+})
+
+// ============= CONTROLE DE SAISIE =============
+var regExEmail = /^\w+([.-]?\w+)@\w+([.-]?\w+)\.(\w{2,3})$/;
+var inputsList = $(".formInput");
+inputsList.each(function(){
+    $(this).on("keyup", function() {
+        if ($(this).val() == "") {
+            $(this).css("background-color","rgb(255, 200, 200)");
+            $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" est requis");
+        } else if (($(this).val() != "") && ($(this).attr("id") == "email")) {
+            if (regExEmail.test($(this).val()) == false) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : local@domain.com)");
+            } else if (regExEmail.test($(this).val()) == true) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
+        } else if ($(this).val() != "") {
+            $(this).css("background-color","rgb(200, 255, 200)");
+            $($(this).siblings(".userHelp")).removeClass("error").text("*requis");   
+        } 
+    });
+})
+
+$("#userInfo").click(function(){
+    formEmptyCheck(event);
+})
+function formEmptyCheck(event) {
+    event.preventDefault();
+    inputsList.each(function(){
+        if ($(this).val() == "") {
+            $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" est requis");
+            $(this).css("background-color","rgb(255, 200, 200)");
+        } else if (($(this).val() != "") && ($(this).attr("id") == "email")) {
+            if (regExEmail.test($(this).val()) == false) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : local@domain.com)");
+            } else if (regExEmail.test($(this).val()) == true) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
+        } else if ($(this).val() != "") {
+            $(this).css("background-color","rgb(200, 255, 200)");
+            $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+        }
+    })
+}
+
+// ============= FORMATAGE TELEPHONE =============
+$("#phone").on("focusout", function(){
+    var phoneNumber = $(this).val().replace(/[^\d]/g, '');
+    if (phoneNumber.length == 10) {
+        phoneNumber = phoneNumber.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5");
+    } else if (phoneNumber.length != 10) {
+        $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli");
+        $(this).css("background-color","rgb(255, 200, 200)"); 
+    }
+    $(this).val(phoneNumber)
+})
+
+$("#phone").on("focusin", function(){
+    var phoneNumber = $(this).val().replace(/[^\d]/g, '');
+    $(this).val(phoneNumber)
+})
+
+// ============= RECHERCHE AUTOMATIQUE VILLE VIA API =============
+$("#cp").on("keyup", function() {
+    if ($("#cp").val().length == 5) {
+        $("#ville").empty();
+        $("#ville").append("<option value=\"noTown\" id=\"noTown\">Saisissez un code postal</option>");
+        $("#ville").prop("disabled", "disabled");
+        $.ajax({
+            url:"https://apicarto.ign.fr/api/codes-postaux/communes/"+$("#cp").val(),
+            dataType:"json",
+            
+            success:function(data){
+                var resultTable = [];
+                $(data).each(function(){
+                    resultTable.push(this.nomCommune);
+                })
+                
+                if (resultTable.length > 1) {
+                    $("#ville").empty();
+                    $("#ville").append("<option value=\"noTown\" id=\"noTown\">Sélectionnez votre ville</option>");
+                    $("#ville").prop('disabled', false);
+                    for (let index = 0; index < resultTable.length; index++) {
+                        $("#ville").append("<option value=\""+resultTable[index]+"\">"+resultTable[index]+"</option>");
+                    }
+                } else if (resultTable.length == 1) {
+                    $("#ville").empty();
+                    $("#ville").prop('disabled', true);
+                    $("#ville").append("<option value=\""+resultTable+"\">"+resultTable+"</option>");
+                } 
+            },
+            error:function(xhr, status){
+                $("#ville").empty();
+                $("#ville").prop('disabled', true);
+                $("#ville").append("<option value=\"noTown\" id=\"noTown\">Introuvable, réessayez</option>");
+            }
+        });
+    } else if ($("#cp").val().length != 5) {
+        $("#ville").empty();
+        $("#ville").append("<option value=\"noTown\" id=\"noTown\">Saisissez un code postal</option>");
+        $("#ville").prop("disabled", "disabled");
+    }
 })
