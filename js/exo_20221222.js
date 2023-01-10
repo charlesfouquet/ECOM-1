@@ -152,6 +152,7 @@ $(".confirmRegister").click(function(){
 // ============= CONTROLE DE SAISIE =============
 var regExEmail = /^\w+([.-]?\w+)@\w+([.-]?\w+)\.(\w{2,3})$/;
 var inputsList = $(".formInput");
+var errorState = "y";
 inputsList.each(function(){
     $(this).on("keyup", function() {
         if ($(this).val() == "") {
@@ -169,6 +170,7 @@ inputsList.each(function(){
             $(this).css("background-color","rgb(200, 255, 200)");
             $($(this).siblings(".userHelp")).removeClass("error").text("*requis");   
         } 
+        validateForm();
     });
 })
 
@@ -194,6 +196,10 @@ function formEmptyCheck(event) {
             $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
         }
     })
+}
+
+function validateForm() {
+
 }
 
 // ============= FORMATAGE TELEPHONE =============
