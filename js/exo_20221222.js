@@ -139,7 +139,7 @@ $(".confirmRegister").click(function(){
     $("#confOrdPagPrenom").text($("#prenom").val());
     $("#confOrdPagEmail").text($("#email").val());
     $("#confOrdPagPhone").text($("#phone").val());
-    $("#confOrdPagAdresse").text($("#adresse").val());
+    $("#confOrdPagAdresse").text($("#adresse").val()+",");
     $("#confOrdPagCP").text($("#cp").val());
     $("#confOrdPagVille").text($("#ville").val());
     $("#confOrdPagCart").html("");
@@ -149,10 +149,16 @@ $(".confirmRegister").click(function(){
     $("#confOrdPagTotal").text($("#totalPrice").html());
 })
 
-// ============= CONTROLE DE SAISIE =============
+// ============= CONTROLE DE SAISIE : INITIALISATION =============
 var regExEmail = /^\w+([.-]?\w+)@\w+([.-]?\w+)\.(\w{2,3})$/;
+var regExTel = /\d{10}/;
+var regExTel2 = /\d{2}\s\d{2}\s\d{2}\s\d{2}\s\d{2}/;
+var regExPostCode = /\d{5}/;
 var inputsList = $(".formInput");
+var selectList = $("#ville");
 var errorState = "y";
+
+// ============= CONTROLE DE SAISIE : CHAMP PAR CHAMP EN LIVE (INPUTS UNIQUEMENT) =============
 inputsList.each(function(){
     $(this).on("keyup", function() {
         if ($(this).val() == "") {
@@ -166,14 +172,67 @@ inputsList.each(function(){
                 $(this).css("background-color","rgb(200, 255, 200)");
                 $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
             } 
+        } else if (($(this).val() != "") && ($(this).attr("id") == "phone")) {
+            if ((regExTel.test($(this).val()) == false) && (regExTel2.test($(this).val()) == false)) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : 0123456789)");
+            } else if ((regExTel.test($(this).val()) == true) || (regExTel2.test($(this).val()) == true)) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
+        } else if (($(this).val() != "") && ($(this).attr("id") == "cp")) {
+            if (regExPostCode.test($(this).val()) == false) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : 75000)");
+            } else if (regExPostCode.test($(this).val()) == true) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
         } else if ($(this).val() != "") {
             $(this).css("background-color","rgb(200, 255, 200)");
             $($(this).siblings(".userHelp")).removeClass("error").text("*requis");   
         } 
         validateForm();
     });
-})
+});
 
+// ============= CONTROLE DE SAISIE : SUR LA VILLE UNE FOIS LE CODE POSTAL SAISI =============
+$("#cp").focusout(function(){
+    if ($(this).val() != "") {
+        selectList.each(function(){
+            if (($(this).val() != "") && ($(this).attr("id") == "ville")) {
+                if (($(this).val()) == "noTown") {
+                    $(this).css("background-color","rgb(255, 200, 200)"); 
+                    $($(this).siblings(".userHelp")).addClass("error").text("Aucune ville n'est sélectionnée");
+                } else if (($(this).val()) != "noTown") {
+                    $(this).removeAttr("style");
+                    $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+                }
+            }
+        });
+    };
+    validateForm();
+});
+
+// ============= CONTROLE DE SAISIE : LORS DE CLICKS OU CHANGEMENTS DE VALEUR SUR VILLE =============
+selectList.each(function(){
+    $(this).on("click", function() {
+        if (($(this).val() != "") && ($(this).attr("id") == "ville")) {
+            if (($(this).val()) == "noTown") {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Aucune ville n'est sélectionnée");
+            } else if (($(this).val()) != "noTown") {
+                $(this).removeAttr("style");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            }
+        }
+    });
+    $(this).on("change", function() {
+        validateForm();
+    });
+});
+
+// ============= CONTROLE DE SAISIE : FORMULAIRE ENTIER LORS DU SUBMIT =============
 $("#userInfo").click(function(){
     formEmptyCheck(event);
 })
@@ -191,18 +250,78 @@ function formEmptyCheck(event) {
                 $(this).css("background-color","rgb(200, 255, 200)");
                 $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
             } 
+        } else if (($(this).val() != "") && ($(this).attr("id") == "phone")) {
+            if ((regExTel.test($(this).val()) == false) && (regExTel2.test($(this).val()) == false)) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : 0123456789)");
+            } else if ((regExTel.test($(this).val()) == true) || (regExTel2.test($(this).val()) == true)) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
+        } else if (($(this).val() != "") && ($(this).attr("id") == "cp")) {
+            if (regExPostCode.test($(this).val()) == false) {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Le champ "+$($(this).siblings("label")).html()+" n'est pas correctement rempli (par exemple : 75000)");
+            } else if (regExPostCode.test($(this).val()) == true) {
+                $(this).css("background-color","rgb(200, 255, 200)");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            } 
         } else if ($(this).val() != "") {
             $(this).css("background-color","rgb(200, 255, 200)");
             $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
         }
     })
+    selectList.each(function(){
+        if (($(this).val() != "") && ($(this).attr("id") == "ville")) {
+            if (($(this).val()) == "noTown") {
+                $(this).css("background-color","rgb(255, 200, 200)"); 
+                $($(this).siblings(".userHelp")).addClass("error").text("Aucune ville n'est sélectionnée");
+            } else if (($(this).val()) != "noTown") {
+                $(this).removeAttr("style");
+                $($(this).siblings(".userHelp")).removeClass("error").text("*requis");
+            }
+        }
+    });
 }
 
+// ============= CONTROLE DE SAISIE : ACTIVATION DU LIEN VERS MODAL SI PAS D'ERREURS =============
 function validateForm() {
-
+    var errorsCounter = 0;
+    inputsList.each(function(){
+        if ($(this).val() == "") {
+            errorsCounter++;
+        } else if (($(this).val() != "") && ($(this).attr("id") == "email")) {
+            if (regExEmail.test($(this).val()) == false) {
+                errorsCounter++;
+            };
+        } else if (($(this).val() != "") && ($(this).attr("id") == "phone")) {
+            if ((regExTel.test($(this).val()) == false) && (regExTel2.test($(this).val()) == false)) {
+                errorsCounter++;
+            };
+        } else if (($(this).val() != "") && ($(this).attr("id") == "cp")) {
+            if (regExPostCode.test($(this).val()) == false) {
+                errorsCounter++;
+            };
+        };
+    });
+    selectList.each(function(){
+        if (($(this).val() != "") && ($(this).attr("id") == "ville")) {
+            if (($(this).val()) == "noTown") {
+                errorsCounter++;
+            }
+        }
+    });
+    if (errorsCounter > 0) {
+        $(".confirmRegister").removeAttr("data-bs-toggle", "data-bs-target");
+    } else if (errorsCounter == 0) {
+        $(".confirmRegister").attr({
+            "data-bs-toggle":"modal",
+            "data-bs-target":"#orderConfirmationPage"
+        });
+    };
 }
 
-// ============= FORMATAGE TELEPHONE =============
+// ============= FORMATAGE TELEPHONE SUR FOCUS IN ET OUT =============
 $("#phone").on("focusout", function(){
     var phoneNumber = $(this).val().replace(/[^\d]/g, '');
     if (phoneNumber.length == 10) {
