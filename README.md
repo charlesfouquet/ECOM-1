@@ -10,3 +10,5 @@ Technologies et connaissances mobilisées :
 - JavaScript
 - jQuery
 - Ajax
+
+(NB: l'utilisation d'un Live Server ou autre est nécessaire pour consulter ce projet de par l'utilisation d'Ajax)
